@@ -1,36 +1,29 @@
 # Maintainer: Jason Goulet-Lipman <jason.gouletlipman@gmail.com>
-pkgname=youtubedl-gui-beta
-_pkgname=ytdl-gui
-pkgver=20210125.r73.0bbc2c1
-pkgrel=1
-arch=('x86_64')
-license=('GPL3')
-pkgdesc="Download Youtube videos to local audio or video files. - Beta Branch"
-source=("git+https://github.com/JaGoLi/$_pkgname#branch=beta")
-install="youtubedl-gui.install"
-md5sums=('SKIP')
-conflicts=("youtubedl-gui")
-makedepends=("git"
-	     "qt5-quickcontrols")
-depends=("youtube-dl"
-	 "qt5-base"
-	 "ffmpeg"
-	 "hicolor-icon-theme"
-	 "gtk-update-icon-cache")
 
+pkgname=youtubedl-gui-git
+pkgver=2.0.r0.g0bbc2c1
+pkgrel=1
+arch=(x86_64)
+url="https://github.com/JaGoLi/ytdl-gui"
+license=(GPL3)
+depends=(youtube-dl qt5-base ffmpeg)
+makedepends=(git qt5-quickcontrols)
+provides=(youtubedl-gui)
+conflicts=(youtubedl-gui)
+source=("git+https://github.com/JaGoLi/ytdl-gui#branch=beta")
+sha256sums=('SKIP')
 
 pkgver(){
-  	cd ${_pkgname}
-  	printf "%s.r%s.%s" "$(TZ=UTC git show -s --pretty=%cd --date=format-local:%Y%m%d HEAD)" \
-    	  "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  	cd ytdl-gui
+    git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
-	cd ${_pkgname}
+	cd ytdl-gui
 	make build
 }
 
 package() {
-	cd ${_pkgname}
-	make DESTDIR="$pkgdir/" install
+	cd ytdl-gui
+	make DESTDIR="${pkgdir}/" install
 }
